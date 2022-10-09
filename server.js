@@ -21,12 +21,19 @@ app.get("/login", (req, res) => {
   res.sendFile(filePath);
 });
 app.post("/login", (req, res) => {
+  console.log(req.cookies)
+  console.log(req.cookie)
   if (req.body.password && req.body.password === secretPagesPassword) {
     res.cookie("secret", req.body.password, {
       httpOnly: true,
       signed: true,
       maxAge: 1440000,
     });
+    if (req.cookies.from) {
+      const { from } = req.cookies;
+      res.clearCookie('from');
+      return res.redirect(from);
+    }
     return res.redirect("/");
   } else {
     res.redirect("/login");
@@ -45,6 +52,10 @@ app.get("/secret/:file", (req, res) => {
       res.redirect("/");
     }
   } else {
+    res.cookie("from", req.url, {
+      httpOnly: true,
+      maxAge: 1440000,
+    })
     res.redirect("/login");
   }
 });
