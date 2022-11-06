@@ -1,4 +1,5 @@
 const express = require("express");
+const compression = require('compression')
 const path = require("path");
 const fs = require("fs");
 const app = express();
@@ -7,6 +8,7 @@ const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 const secretPagesPassword = process.env.SECRET_PAGES_PASSWORD || "Gin";
 
+app.use(compression())
 app.use(express.static("public"));
 app.use(cookieParser("ginsartworks"));
 app.use(bodyParser.urlencoded({ extended: false }));
